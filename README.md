@@ -2,14 +2,10 @@
 Репозиторий для работы с файлами
 
 Установка:
-```shell
-mkdir files
-```
 
 ```shell
 python -m venv .venv
 ```
-
 ```shell
 .venv\Scripts\activate.bat
 ```
