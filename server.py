@@ -1,5 +1,7 @@
-import uvicorn
 import os
+
+import uvicorn
+
 from app import create_app
 from app.core.config import settings
 
