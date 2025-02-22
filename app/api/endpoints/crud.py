@@ -1,14 +1,19 @@
-from fastapi import APIRouter, Query, UploadFile, HTTPException, Depends
-from typing import Annotated
-import aiofile
 import os
+from typing import Annotated
+
+import aiofile
+from fastapi import APIRouter
+from fastapi import Depends
+from fastapi import HTTPException
+from fastapi import UploadFile
 from fastapi.responses import FileResponse
+
 from app.utils import get_jwt_payload
 
 router = APIRouter(prefix="/files")
 
 
-@router.get("/download")
+@router.get("/download/{file:str}")
 async def download(file: str):
     """Эндпоинт отдает файлы"""
     return FileResponse("./files/" + file)
