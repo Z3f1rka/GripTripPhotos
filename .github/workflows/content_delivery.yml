@@ -18,5 +18,5 @@ jobs:
           cd GribTrip && \
           git submodule update --remote --merge && \
           git add . && \
-          git commit -m "Backend update" && \
+          git commit -m "Photo server update" && \
           git push "https://x-access-token:${{ secrets.CD_USER_TOKEN }}@github.com/${{ secrets.MAIN_REPOSITORY }}" ${{ secrets.MAIN_BRANCH }}
