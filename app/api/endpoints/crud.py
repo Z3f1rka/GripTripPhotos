@@ -1,7 +1,7 @@
 import os
 from typing import Annotated
 
-import aiofile
+import asyncio
 from fastapi import APIRouter
 from fastapi import Depends
 from fastapi import HTTPException
@@ -11,6 +11,14 @@ from fastapi.responses import FileResponse
 from app.utils import get_jwt_payload
 
 router = APIRouter(prefix="/files")
+
+
+async def save_files(filename: str, data):
+    def stdlib_read():
+        with open(filename, 'ab') as fp:
+            fp.write(data)
+
+    await asyncio.to_thread(stdlib_read)
 
 
 @router.get("/download/{file:str}")
@@ -30,8 +38,7 @@ async def upload_file(file: UploadFile, jwt_access: Annotated[str, Depends(get_j
         file.filename = "./files/" + f"({max(existing_indexes) + 1}) " + file.filename
     else:
         file.filename = "./files/" + "(0) " + file.filename
-    async with aiofile.async_open(file.filename, mode="ab") as f:
-        await f.write(file.file.read())
+    await save_files(filename=file.filename, data=file.file.read())
     return file.filename[8:]
 
 
@@ -48,7 +55,6 @@ async def upload_list_files(files: list[UploadFile], jwt_access: Annotated[str, 
             file.filename = "./files/" + f"({max(existing_indexes) + 1}) " + file.filename
         else:
             file.filename = "./files/" + "(0) " + file.filename
-        async with aiofile.async_open(file.filename, mode="ab") as f:
-            await f.write(file.file.read())
+        await save_files(filename=file.filename, data=file.file.read())
         return_files.append(file.filename[8:])
     return return_files
